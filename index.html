@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>CanvasDemo</title>
+    <style>
+        body{
+            text-align: center;
+        }
+        canvas{
+            border: 1px solid black;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="900px" height="288px">您的浏览器不支持HTML5，请使用Chrome/Firefox/360/搜狗浏览器</canvas>
+</body>
+<script src="polyfill_requestAnimFrame.js"></script>
+<script>
+    window.onload= function () {
+        var oCanvas=document.getElementById("canvas");
+        var oContext=oCanvas.getContext("2d");
+        oContext.font="20px Arial";
+        var aBalls=[];
+        var oMousePos={
+            x : "",
+            y: ""
+        };
+        var COLOR={
+            red:"#EF2B36",
+            yellow:"#FFC636",
+            blue:"#3A5BCD",
+            green:"#02A817",
+            purple:"#FF70F7",
+            cyan:"#6EF3FF"
+        }
+        function Ball(posX,posY,color,radius){
+            this.iOriginX=this.iCurX=posX;
+            this.iOriginY=this.iCurY=posY;
+            this.sColor=color;
+            this.iRadius=radius;
+            this.iDX=this.iDY=0;
+        }
+
+        //init
+        (function() {
+            //C
+            aBalls.push(new Ball(153,83,COLOR.red,15));
+            aBalls.push(new Ball(120,82,COLOR.red,15));
+            aBalls.push(new Ball(91,94,COLOR.red,15));
+            aBalls.push(new Ball(75,121,COLOR.red,15));
+            aBalls.push(new Ball(73,152,COLOR.red,15));
+            aBalls.push(new Ball(85,181,COLOR.red,15));
+            aBalls.push(new Ball(113,197,COLOR.red,15));
+            aBalls.push(new Ball(144,197,COLOR.red,15));
+            //A
+            aBalls.push(new Ball(244,83,COLOR.yellow,15));
+            aBalls.push(new Ball(230,110,COLOR.yellow,15));
+            aBalls.push(new Ball(257,110,COLOR.yellow,15));
+            aBalls.push(new Ball(219,138,COLOR.yellow,15));
+            aBalls.push(new Ball(268,138,COLOR.yellow,15));
+            aBalls.push(new Ball(209,168,COLOR.yellow,15));
+            aBalls.push(new Ball(232,165,COLOR.yellow,15));
+            aBalls.push(new Ball(256,165,COLOR.yellow,15));
+            aBalls.push(new Ball(281,165,COLOR.yellow,15));
+            aBalls.push(new Ball(199,197,COLOR.yellow,15));
+            aBalls.push(new Ball(293,194,COLOR.yellow,15));
+            //N
+            aBalls.push(new Ball(345,201,COLOR.blue,15));
+            aBalls.push(new Ball(345,170,COLOR.blue,15));
+            aBalls.push(new Ball(345,140,COLOR.blue,15));
+            aBalls.push(new Ball(345,109,COLOR.blue,15));
+            aBalls.push(new Ball(345,78,COLOR.blue,15));
+            aBalls.push(new Ball(362,98,COLOR.blue,15));
+            aBalls.push(new Ball(377,123,COLOR.blue,15));
+            aBalls.push(new Ball(394,148,COLOR.blue,15));
+            aBalls.push(new Ball(411,175,COLOR.blue,15));
+            aBalls.push(new Ball(433,197,COLOR.blue,15));
+            aBalls.push(new Ball(434,168,COLOR.blue,15));
+            aBalls.push(new Ball(434,138,COLOR.blue,15));
+            aBalls.push(new Ball(434,108,COLOR.blue,15));
+            aBalls.push(new Ball(434,78,COLOR.blue,15));
+            //V
+            aBalls.push(new Ball(487,82,COLOR.green,15));
+            aBalls.push(new Ball(496,111,COLOR.green,15));
+            aBalls.push(new Ball(506,140,COLOR.green,15));
+            aBalls.push(new Ball(517,170,COLOR.green,15));
+            aBalls.push(new Ball(532,198,COLOR.green,15));
+            aBalls.push(new Ball(549,169,COLOR.green,15));
+            aBalls.push(new Ball(558,140,COLOR.green,15));
+            aBalls.push(new Ball(568,112,COLOR.green,15));
+            aBalls.push(new Ball(578,83,COLOR.green,15));
+            //A
+            aBalls.push(new Ball(665,78,COLOR.purple,15));
+            aBalls.push(new Ball(652,103,COLOR.purple,15));
+            aBalls.push(new Ball(645,130,COLOR.purple,15));
+            aBalls.push(new Ball(638,155,COLOR.purple,15));
+            aBalls.push(new Ball(626,176,COLOR.purple,15));
+            aBalls.push(new Ball(619,197,COLOR.purple,15));
+            aBalls.push(new Ball(679,102,COLOR.purple,15));
+            aBalls.push(new Ball(687,128,COLOR.purple,15));
+            aBalls.push(new Ball(696,154,COLOR.purple,15));
+            aBalls.push(new Ball(705,178,COLOR.purple,15));
+            aBalls.push(new Ball(712,195,COLOR.purple,15));
+            aBalls.push(new Ball(656,163,COLOR.purple,15));
+            aBalls.push(new Ball(676,163,COLOR.purple,15));
+            //S
+            aBalls.push(new Ball(824,86,COLOR.cyan,15));
+            aBalls.push(new Ball(802,82,COLOR.cyan,15));
+            aBalls.push(new Ball(785,83,COLOR.cyan,15));
+            aBalls.push(new Ball(766,94,COLOR.cyan,15));
+            aBalls.push(new Ball(761,117,COLOR.cyan,15));
+            aBalls.push(new Ball(781,132,COLOR.cyan,15));
+            aBalls.push(new Ball(801,145,COLOR.cyan,15));
+            aBalls.push(new Ball(819,159,COLOR.cyan,15));
+            aBalls.push(new Ball(823,179,COLOR.cyan,15));
+            aBalls.push(new Ball(812,195,COLOR.cyan,15));
+            aBalls.push(new Ball(789,199,COLOR.cyan,15));
+            aBalls.push(new Ball(766,197,COLOR.cyan,15));
+        })();
+        function draw() {
+            updateBalls();
+            oContext.clearRect(0,0,oCanvas.width,oCanvas.height);
+            oContext.fillText("by QS",800,260);
+            for(var i=aBalls.length-1;i>=0;i--){
+                oContext.beginPath();
+                oContext.arc(aBalls[i].iCurX,aBalls[i].iCurY,aBalls[i].iRadius,0,2*Math.PI);
+                oContext.fillStyle=aBalls[i].sColor;
+                oContext.fill();
+            }
+            requestAnimFrame(draw);
+        };
+
+        oCanvas.addEventListener("mousemove", function (e) {
+            e=e||window.event;
+            if(e.pageX){
+                oMousePos.x= e.pageX-oCanvas.offsetLeft;
+                oMousePos.y= e.pageY-oCanvas.offsetTop;
+            }else{
+                oMousePos.x=e.clientX+document.body.scrollLeft -document.body.clientLeft;
+                oMousePos.y=e.clientY+document.body.scrollTop-document.body.clientTop;
+            }
+
+        })
+        oCanvas.addEventListener("mouseleave", function (e) {
+            oMousePos.x="";
+            oMousePos.y="";
+        })
+        var MaxSpeed=5;
+        function updateBalls(){
+            for(var i=aBalls.length-1;i>=0;i--){
+                //移动
+                aBalls[i].iCurX+=aBalls[i].iDX;
+                aBalls[i].iCurY+=aBalls[i].iDY;
+                //边缘碰撞检测
+                if((aBalls[i].iCurX<=0+aBalls[i].iRadius && aBalls[i].iDX<0) || (aBalls[i].iCurX >=900-aBalls[i].iRadius && aBalls[i].iDX>0)) {aBalls[i].iDX=-aBalls[i].iDX;}
+                if((aBalls[i].iCurY<=0+aBalls[i].iRadius && aBalls[i].iDY<0 )|| (aBalls[i].iCurY >=288-aBalls[i].iRadius && aBalls[i].iDY>0)) {aBalls[i].iDY=-aBalls[i].iDY;}
+                //速度控制
+                if(oMousePos.x!=""){
+                    //有鼠标
+                    var Dis=Math.pow(Math.pow(aBalls[i].iCurX-oMousePos.x,2)+Math.pow(aBalls[i].iCurY-oMousePos.y,2),0.5);
+                    aBalls[i].iDX+=0.003*(aBalls[i].iOriginX-aBalls[i].iCurX)+20/Math.pow(Dis,1.8)*(aBalls[i].iCurX-oMousePos.x);
+                    aBalls[i].iDY+=0.003*(aBalls[i].iOriginY-aBalls[i].iCurY)+20/Math.pow(Dis,1.8)*(aBalls[i].iCurY-oMousePos.y);
+                }else{
+                    //无鼠标
+                    aBalls[i].iDX+=0.003*(aBalls[i].iOriginX-aBalls[i].iCurX);
+                    aBalls[i].iDY+=0.003*(aBalls[i].iOriginY-aBalls[i].iCurY);
+                }
+                //限制最大速度
+                if(aBalls[i].iDX>MaxSpeed) aBalls[i].iDX=MaxSpeed;
+                if(aBalls[i].iDX<-MaxSpeed) aBalls[i].iDX=-MaxSpeed;
+                if(aBalls[i].iDY>MaxSpeed) aBalls[i].iDY=MaxSpeed;
+                if(aBalls[i].iDY<-MaxSpeed) aBalls[i].iDY=-MaxSpeed;
+                //阻力
+                aBalls[i].iDX*=0.98;
+                aBalls[i].iDY*=0.98;
+            }
+        }
+        draw();
+    }
+</script>
+</html>
