@@ -154,8 +154,22 @@
                 aBalls[i].iCurX+=aBalls[i].iDX;
                 aBalls[i].iCurY+=aBalls[i].iDY;
                 //边缘碰撞检测
-                if((aBalls[i].iCurX<=0+aBalls[i].iRadius && aBalls[i].iDX<0) || (aBalls[i].iCurX >=900-aBalls[i].iRadius && aBalls[i].iDX>0)) {aBalls[i].iDX=-aBalls[i].iDX;}
-                if((aBalls[i].iCurY<=0+aBalls[i].iRadius && aBalls[i].iDY<0 )|| (aBalls[i].iCurY >=288-aBalls[i].iRadius && aBalls[i].iDY>0)) {aBalls[i].iDY=-aBalls[i].iDY;}
+                if((aBalls[i].iCurX<=0+aBalls[i].iRadius)) {
+                    aBalls[i].iCurX=aBalls[i].iRadius+1;
+                    aBalls[i].iDX=-aBalls[i].iDX;
+                }
+                if((aBalls[i].iCurX >=oCanvas.width-aBalls[i].iRadius)) {
+                    aBalls[i].iCurX=oCanvas.width-aBalls[i].iRadius-1;
+                    aBalls[i].iDX=-aBalls[i].iDX;
+                }
+                if(aBalls[i].iCurY<=0+aBalls[i].iRadius) {
+                    aBalls[i].iCurY=aBalls[i].iRadius+1;
+                    aBalls[i].iDY=-aBalls[i].iDY;
+                }
+                if(aBalls[i].iCurY >=oCanvas.height-aBalls[i].iRadius) {
+                    aBalls[i].iCurY=oCanvas.height-aBalls[i].iRadius-1;
+                    aBalls[i].iDY=-aBalls[i].iDY;
+                }
                 //速度控制
                 if(oMousePos.x!=""){
                     //有鼠标
